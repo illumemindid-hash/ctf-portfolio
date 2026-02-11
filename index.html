@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CTF Write-Up Portfolio — IllumeMindID</title>
+  <meta name="description" content="CTF write-up portfolio focusing on Digital Forensics, Steganography, and Encoding." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="container">
+    <nav class="nav">
+      <a class="brand" href="#top">IllumeMindID</a>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#writeups">Write-ups</a>
+        <a href="#downloads">Downloads</a>
+      </div>
+    </nav>
+
+    <section id="top" class="hero">
+      <div class="hero-left">
+        <p class="pill">CTF Portfolio • picoCTF • DFIR • Stego</p>
+        <h1>CTF Write-Up Portfolio</h1>
+        <p class="subtitle">
+          Digital Forensics & Steganography focused write-ups (CTFtime style), with command evidence and
+          reproducible steps.
+        </p>
+
+        <div class="cta">
+          <a class="btn primary" href="#writeups">View Write-ups</a>
+          <a class="btn" href="#downloads">Download PDF</a>
+        </div>
+
+        <div class="meta">
+          <div class="meta-card">
+            <div class="meta-k">Author</div>
+            <div class="meta-v">IllumeMindID</div>
+          </div>
+          <div class="meta-card">
+            <div class="meta-k">Platform</div>
+            <div class="meta-v">picoCTF</div>
+          </div>
+          <div class="meta-card">
+            <div class="meta-k">Focus</div>
+            <div class="meta-v">DFIR / Stego / Encoding</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="card">
+          <div class="card-title">Quick Commands</div>
+          <pre><code># PDF metadata
+pdfinfo confidential.pdf
+
+# Image metadata
+exiftool img.jpg
+
+# Base64 decode (log -> image)
+base64 --decode logs.txt > output.png
+
+# Hex decode
+echo "..." | xxd -r -p</code></pre>
+          <p class="hint">Tip: Replace “...” with your hex string.</p>
+        </div>
+      </div>
+    </section>
+  </header>
+
+  <main class="container">
+    <section id="about" class="section">
+      <h2>About</h2>
+      <p>
+        This portfolio documents solutions for forensic and steganography challenges using a structured approach:
+        identify the artifact, validate file types, extract/ decode hidden payloads, and confirm results.
+      </p>
+    </section>
+
+    <section id="skills" class="section">
+      <h2>Skills Mapping</h2>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">DFIR</div>
+          <ul>
+            <li>Metadata analysis (pdfinfo, exiftool)</li>
+            <li>File inspection & validation (file)</li>
+            <li>Forensic decoding workflows</li>
+            <li>Incident-style investigation mindset</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Steganography</div>
+          <ul>
+            <li>steghide extraction</li>
+            <li>Hidden payload recovery from images</li>
+            <li>Layered hint interpretation</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Encoding</div>
+          <ul>
+            <li>Base64 decoding</li>
+            <li>Hexadecimal decoding</li>
+            <li>Layered encoding analysis</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="writeups" class="section">
+      <div class="section-head">
+        <h2>Write-ups</h2>
+        <div class="filters">
+          <button class="chip active" data-filter="all">All</button>
+          <button class="chip" data-filter="dfir">DFIR</button>
+          <button class="chip" data-filter="stego">Stego</button>
+          <button class="chip" data-filter="encoding">Encoding</button>
+        </div>
+      </div>
+
+      <div class="writeups">
+        <!-- 1 -->
+        <article class="writeup card" data-tags="dfir encoding">
+          <div class="writeup-top">
+            <h3>Riddle Registry</h3>
+            <span class="tag">PDF Forensics</span>
+          </div>
+          <p class="muted">Hidden flag inside PDF metadata (Author field → Base64).</p>
+
+          <details>
+            <summary>Steps & Evidence</summary>
+            <pre><code>sudo apt-get update
+sudo apt install poppler-utils
+
+pdfinfo confidential.pdf
+echo "cGljb0NURn..." | base64 --decode</code></pre>
+            <p><b>Flag:</b> <code>picoCTF{puzzl3d_m3tadata_f0und!_42440c7d}</code></p>
+          </details>
+
+          <div class="screenshots">
+            <div class="shot">
+              <div class="shot-box">Screenshot placeholder</div>
+              <div class="shot-cap">pdfinfo output showing Base64 in Author</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2 -->
+        <article class="writeup card" data-tags="stego encoding dfir">
+          <div class="writeup-top">
+            <h3>Hidden in Plain Sight</h3>
+            <span class="tag">Steganography</span>
+          </div>
+          <p class="muted">Comment metadata → Base64 → steghide password → extract hidden file.</p>
+
+          <details>
+            <summary>Steps & Evidence</summary>
+            <pre><code>sudo apt install libimage-exiftool-perl steghide
+
+exiftool img.jpg
+echo "c3RlZ2hpZ..." | base64 --decode
+echo "cEF6endv..." | base64 --decode
+
+steghide extract -sf img.jpg</code></pre>
+            <p><b>Flag:</b> <code>picoCTF{h1dd3n_1n_1m4g3_656e4d79}</code></p>
+          </details>
+
+          <div class="screenshots">
+            <div class="shot">
+              <div class="shot-box">Screenshot placeholder</div>
+              <div class="shot-cap">exiftool showing Comment Base64</div>
+            </div>
+            <div class="shot">
+              <div class="shot-box">Screenshot placeholder</div>
+              <div class="shot-cap">steghide extract result (flag.txt created)</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3 -->
+        <article class="writeup card" data-tags="dfir encoding">
+          <div class="writeup-top">
+            <h3>Flag in Flame</h3>
+            <span class="tag">Forensics</span>
+          </div>
+          <p class="muted">Base64 log → image → hex string → decode to flag.</p>
+
+          <details>
+            <summary>Steps & Evidence</summary>
+            <pre><code>base64 --decode logs.txt > output.png
+file output.png
+
+echo "7069636F..." | xxd -r -p</code></pre>
+            <p><b>Flag:</b> <code>picoCTF{forensics_analysis_is_amazing_782e55c9}</code></p>
+          </details>
+
+          <div class="screenshots">
+            <div class="shot">
+              <div class="shot-box">Screenshot placeholder</div>
+              <div class="shot-cap">decoded PNG containing hex string</div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="downloads" class="section">
+      <h2>Downloads</h2>
+      <p class="muted">Attach your PDFs in <code>/assets</code> and update links below.</p>
+
+      <div class="grid-2">
+        <a class="card link-card" href="assets/CTF_Portfolio_Upgraded.pdf" target="_blank" rel="noreferrer">
+          <div class="card-title">PDF Portfolio (Upgraded)</div>
+          <p class="muted">Command evidence blocks + skill mapping + screenshot placeholders.</p>
+        </a>
+
+        <a class="card link-card" href="assets/CTF_Portfolio_Forensics_Stego_English.pdf" target="_blank" rel="noreferrer">
+          <div class="card-title">PDF Portfolio (CTFtime English)</div>
+          <p class="muted">Clean English write-ups in CTFtime style.</p>
+        </a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>© <span id="year"></span> IllumeMindID • Built for GitHub Pages</p>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
